@@ -350,6 +350,9 @@ As illustrated in the figure above the RSS value fades rapidly until iteration n
 
 #### 4. Teste valores diferentes do número de iterações e learning_rate até que w0 e w1 sejam aproximadamente iguais a -39 e 5 respectivamente. Reporte os valores do número de iterações e learning_rate usados para atingir esses valores.
 
+Before answer, this question lets change de gradient_descent_runner method to the original form.
+
+
 
 ```python
 def gradient_descent_runner(points, starting_b, starting_m, learning_rate, num_iterations):
@@ -363,53 +366,49 @@ def gradient_descent_runner(points, starting_b, starting_m, learning_rate, num_i
 ```
 
 
+To find the w0=5 and w1=-39, we executed the algorithm varying the input parameters; number of iterations (_500,5000,10000,15000,30000,50000_) and learning rate (_0.001,0.002,0.003,0.004,0.005_).
+
+
+
 ```python
 import warnings
 warnings.filterwarnings('ignore')
 #warnings.filterwarnings(action='once')
 
-for i in [10000,15000,15500,16000,17000,18000,19000,20000]:
-    for llr in [0.001,0.002,0.003,0.004,0.005]:
+for llr in [0.001,0.002,0.003,0.004,0.005]:
+    for i in [500,5000,10000,15000,30000,50000]:
         ws = run(iterations=i,lr=llr,show=False)
         w0,w1 = ws[0],ws[1]
-        if (w0 >= -39.5 and w0 < -38) and (w1 >= 5 and w1 <6):
+        if (w0 >= -39.5 and w0 < -38.8) and (w1 >= 5 and w1 <6):
             print("Iteration {0},Learning Rate  = {1};".format(i,llr))
             print("\t [w0={0}, w1={1}]\n".format(w0,w1))
 ```
 
+    Iteration 50000,Learning Rate  = 0.001;
+    	 [w0=-39.10519020198799, w1=5.579179883407752]
+    
+    Iteration 30000,Learning Rate  = 0.002;
+    	 [w0=-39.31453290150513, w1=5.591641626701886]
+    
+    Iteration 50000,Learning Rate  = 0.002;
+    	 [w0=-39.44332337128485, w1=5.599308260297552]
+    
     Iteration 15000,Learning Rate  = 0.003;
     	 [w0=-38.897738890893926, w1=5.566830730603052]
     
-    Iteration 15500,Learning Rate  = 0.003;
-    	 [w0=-38.97067373193596, w1=5.571172392711932]
+    Iteration 30000,Learning Rate  = 0.003;
+    	 [w0=-39.438666405196905, w1=5.599031040618761]
     
-    Iteration 16000,Learning Rate  = 0.003;
-    	 [w0=-39.0339106358241, w1=5.574936756431266]
-    
-    Iteration 17000,Learning Rate  = 0.003;
-    	 [w0=-39.13627719792132, w1=5.581030428776664]
-    
-    Iteration 18000,Learning Rate  = 0.002;
-    	 [w0=-38.154894389696885, w1=5.522610714797734]
-    
-    Iteration 18000,Learning Rate  = 0.003;
-    	 [w0=-39.21323084965705, w1=5.585611322477226]
-    
-    Iteration 19000,Learning Rate  = 0.002;
-    	 [w0=-38.37859716866191, w1=5.535927284289177]
-    
-    Iteration 19000,Learning Rate  = 0.003;
-    	 [w0=-39.271080448140545, w1=5.5890549909100535]
-    
-    Iteration 20000,Learning Rate  = 0.002;
-    	 [w0=-38.563547899710045, w1=5.546937023523936]
-    
-    Iteration 20000,Learning Rate  = 0.003;
-    	 [w0=-39.314568651353895, w1=5.591643754817359]
+    Iteration 50000,Learning Rate  = 0.003;
+    	 [w0=-39.446231462889585, w1=5.599481373050649]
     
     
 
+As shown in the algorithm output the learning rate of *0.003* starts to return values near the target (w0=39 and w1=5) to _15000_ iterations. Thus to a learning rate of 0.002 and 0.001, the algorithm needs to 30k and 50 iterations respectively. This result indicates that there is an optimization problem, find the learning rate to minimize the number of iteration.
+
 #### 5. O algoritmo do vídeo usa o número de iterações como critério de parada. Mude o algoritmo para considerar um critério de parada que é relacionado ao tamanho do gradiente (como no algoritmo apresentado em sala). Plote o tamanho do gradiente vs número de iterações.
+
+First, the method run() must be changed to receive as input gradient modulus threshold (gradient_threshold)
 
 
 ```python
@@ -429,6 +428,8 @@ def run(gradient_threshold=0.1,lr=0.0001, inputfile="./income.csv", show=True , 
         return [b,m,i]
 ```
 
+Now lets, change the step_gradient method to return gradient (b_gradient, m_gradient).
+
 
 ```python
 def step_gradient(b_current, m_current, points, learningRate):
@@ -444,6 +445,8 @@ def step_gradient(b_current, m_current, points, learningRate):
     new_m = m_current - (learningRate * m_gradient)
     return [new_b, new_m, b_gradient, m_gradient]
 ```
+
+The gradient_descent_runner method recives the new stop condition, gradiente_modulus ($|\nabla_{f}|$) >= gradient_threshold.
 
 
 ```python
@@ -480,8 +483,13 @@ def gradient_descent_runner(points, starting_b, starting_m, learning_rate, gradi
     
     
     return [b, m ,i]
+```
 
-run(gradient_threshold=1)
+The new implementation was tested using a $lr = 0.003$ (the fastest learning rate of the previous question), and $|\nabla_{f}| >= 1$ as stop condition.
+
+
+```python
+run(gradient_threshold=1,lr=0.003)
 ```
 
     Starting gradient descent at b = 0, m = 0, error = 2946.6344970460195
@@ -489,38 +497,42 @@ run(gradient_threshold=1)
     
 
 
-![png](output_19_1.png)
+![png](output_27_1.png)
 
 
-    After 139721 iterations b = -28.950316961307475, m = 4.974681021963283, error = 35.08600903586175
+    After 4658 iterations b = -28.954136895105925, m = 4.974908414819624, error = 35.082183085111716
     
 
+As illustrated in the previous plot the gradient value falls at a constant rate until the stop condition was stratified, $|\nabla_{f}| >= 1$.
+
 #### 6. Ache um valor de tolerância que se aproxime dos valores dos parâmetros do item 4 acima. Que valor foi esse?
+
+As shown in the execution below, the algorithm found the same parameters as in question 4 after 15.156 iteration in 1.19s.
 
 
 ```python
 import time
 
-gt = 1
-w0 = -40
+gt = 0.1
+w0 = 0
 w1 = 8
 
+while not ((w0 > -40 and w0 <= -38.89) and (w1 >= 4.89 and w1 < 6)):
+    gt = gt-0.01
+    start = time.time()
+    w0,w1,i = run(gradient_threshold=gt,lr=0.003,plot=False,show=False)
 
-start_time = time.time()
-
-while (w0 < -38) and (w1 >= 5):
-    gt = gt-0.1
-    w0,w1,i = run(gradient_threshold=gt,plot=False,show=False)
-
-end_time = time.time()   
-coeftime = end_time - start_time
+end = time.time()   
+coeftime = end - start
 print("After {0} iterations b = {1}, m = {2} with modulus threshold = {3} (execution time = {4}s)".format(i, w0, w1,gt,coeftime))
 ```
 
-    After 150799 iterations b = -29.999889277337726, m = 5.037159918056469 with modulus threshold = 0.9 (execution time = 14.372795104980469s)
+    After 15156 iterations b = -38.92162101491756, m = 5.568252384664014 with modulus threshold = 0.05000000000000002 (execution time = 1.9393978118896484s)
     
 
 #### 7. Implemente a forma fechada (equações normais) de calcular os coeficientes de regressão (vide algoritmo nos slides). Compare o tempo de processamento com o gradiente descendente considerando sua solução do item 6.*
+
+The algorithm was implemented as displayed in the presentation.
 
 
 ```python
@@ -551,6 +563,8 @@ def nomalEquation(points):
     return [w0,w1]
 ```
 
+The $run()$ method was modified to invoker the $nomalEquation$ method.
+
 
 ```python
 def run(inputfile="./income.csv", show=True):
@@ -565,9 +579,21 @@ def run(inputfile="./income.csv", show=True):
         print("b = {0}, m = {1}, error = {2}".format(b, m, compute_error_for_line_given_points(b, m, points)))
     if not show:
         return [b,m]
+
+```
+
+
+```python
+start = time.time()
 run()
+end = time.time()
+ntime = end-start
+print(ntime)
 ```
 
     Running...
     b = -30.161467210721675, m = 5.019183532346513, error = 34.148888021867066
+    0.0039920806884765625
     
+
+As expected the normal method was faster than the gradient runner method $(\frac{coeftime}{ntime} \displaystyle \cong 2660)$. This result can be explained by the fact that the linear regression has a well know method to find the global minimum ( or maximum) point, via the normal form method. However, gradient descends method is useful when there is no easy way to find the global (or local) minimum an maximum of a function. 
