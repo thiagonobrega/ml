@@ -392,6 +392,12 @@ To predict the election result, we use the following approaches:
 4. Linear SVM Regression
 
 
+
+### Disclaimer 
+
+> Before we start to build and evaluate our model it is important to make the following disclaimer. In this notebook, we want to **predict the number of votes based** on gender, region (state), and **mainly in the income/spent of a certain candidate**. This kind of prediction is notably complex (even with much more information), so since we employ such limited information, it is expected high RMSE values and a moderated R² metric.
+
+
 ```python
 from sklearn.linear_model import Ridge, Lasso , LogisticRegression
 from sklearn.model_selection import cross_val_score, train_test_split
@@ -480,35 +486,35 @@ RidgeModel.fit(X_train, Y_train)
 print_coefficients(RidgeModel)
 ```
 
-               46             45             44             43
-    1.726e+12 x  + 1.726e+12 x  + 6.124e+12 x  + 6.124e+12 x 
+                46             45             44             43
+    -3.959e+13 x  - 3.959e+13 x  - 2.842e+13 x  - 2.842e+13 x 
                   42             41             40             39
-     + 4.228e+13 x  + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x 
+     + 4.641e+12 x  + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x 
                   38             37             36             35
-     + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x 
+     + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x 
                   34             33             32             31
-     + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x 
+     + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x 
                   30             29             28             27
-     - 1.328e+13 x  + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x 
+     - 4.164e+12 x  + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x 
                   26             25             24             23
-     + 3.733e+12 x  - 6.124e+12 x  + 3.733e+12 x  + 3.733e+12 x 
-                  22             21             20             19
-     + 3.733e+12 x  + 3.733e+12 x  + 3.919e+13 x  + 3.733e+12 x 
+     + 1.104e+13 x  - 5.158e+13 x  + 1.104e+13 x  + 1.104e+13 x 
+                  22             21            20             19
+     + 1.104e+13 x  + 1.104e+13 x  - 1.48e+12 x  + 1.104e+13 x 
                   18             17             16             15
-     + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x  + 3.733e+12 x 
+     + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x  + 1.104e+13 x 
                   14             13             12             11
-     + 3.733e+12 x  - 2.196e+12 x  + 3.733e+12 x  + 3.733e+12 x 
+     + 1.104e+13 x  - 3.907e+13 x  + 1.104e+13 x  + 1.104e+13 x 
                   10             9             8             7         6
-     + 3.733e+12 x  + 3.733e+12 x + 3.733e+12 x + 3.733e+12 x + 1.556 x
-              5         4          3           2
-     - 1.495 x + 1.661 x + 0.2006 x + 0.02872 x + 0.3567 x - 1.158e+13
+     + 1.104e+13 x  + 1.104e+13 x + 1.104e+13 x + 1.104e+13 x + 1.569 x
+             5         4           3           2
+     - 1.49 x + 1.852 x + 0.01781 x + 0.05287 x + 0.3293 x + 5.697e+13
     
 
 The model achieved a low RMSE (**1.07**) and is **73** *percent* explained by R²). As illustrated in the plot below the residue is randomly distributed, and near from zero.
 
 
 ```python
-#print_poly_predictions(X_train,Y_train,model)
+#print_poly_predictions(X_train,Y_train,RidgeModel)
 ```
 
 
@@ -517,7 +523,7 @@ show_results("Ridge",RidgeModel,None,X_validation,Y_validation)
 ```
 
     Results
-    	 Mean squared error: 1.07
+    	 Mean squared error: 1.05
     	 Variance score: 0.73
     
 
@@ -554,25 +560,25 @@ best_LassoModel.fit(X_train, Y_train)
 print_coefficients(best_LassoModel)
 ```
 
-               46          45             44          43           41
-    1.111e-14 x  + 0.2772 x  + 1.137e-14 x  - 0.4739 x  + 0.05204 x 
-               40          39          38           37          36
-     - 0.4221 x  - 0.3686 x  - 0.1265 x  + 0.06952 x  + 0.2456 x 
-               35           34           33          32          31
-     + 0.1299 x  - 0.04404 x  - 0.07032 x  - 0.3623 x  + 0.2189 x 
-               29            28          27          26          24
-     + 0.1005 x  - 0.009801 x  - 0.5542 x  - 0.4039 x  + 0.3891 x 
-              23          22            21          19          18
-     - 0.152 x  + 0.1326 x  + 0.003684 x  + 0.0931 x  - 0.2254 x 
-               17          16          15          14          12
-     + 0.2559 x  + 0.2057 x  - 0.2892 x  + 0.5401 x  + 0.2197 x 
-              11           10           9          8           7         6
-     - 0.371 x  + 0.08315 x  - 0.09373 x + 0.1876 x + 0.09634 x + 1.391 x
-              5         4        3           2
-     - 1.325 x + 1.453 x + 0.23 x + 0.08445 x + 0.2965 x + 2.538
+              46          45             44          43          41
+    4.44e-17 x  + 0.2771 x  + 5.275e-14 x  - 0.5177 x  + 0.0638 x 
+               40          39           38           37          36
+     - 0.3796 x  - 0.3512 x  - 0.08989 x  + 0.09207 x  + 0.2327 x 
+               35           34          33         32          31
+     + 0.2173 x  - 0.02133 x  - 0.2394 x  - 0.304 x  + 0.1831 x 
+                29           28          27          26         24
+     + 0.07632 x  - 0.04298 x  - 0.4951 x  - 0.2893 x  + 0.466 x 
+               23          22           21          19          18
+     - 0.2309 x  + 0.1963 x  - 0.06169 x  + 0.0804 x  - 0.2677 x 
+               17          16          15          14         12
+     + 0.2525 x  + 0.1075 x  - 0.3464 x  + 0.4948 x  + 0.206 x 
+               11          10           9           8          7         6
+     - 0.6143 x  + 0.1894 x  - 0.07597 x - 0.01871 x + 0.1364 x + 1.391 x
+             5         4           3          2
+     - 1.31 x + 1.641 x + 0.03725 x + 0.1169 x + 0.2659 x + 2.478
     
 
-The model achieved (with no regularization, $alpha = 0$) a low RMSE (**1.08**) and is **73** *percent* explained by R²( the same as the Ridge Regression). As illustrated in the plot below the residue is randomly distributed, and near from zero.
+The model achieved (with no regularization, $alpha = 0$) a RMSE of **1.05** and is **73** *percent* explained by R²( the same as the Ridge Regression). As illustrated in the plot below the residue is randomly distributed, and near from zero.
 
 
 ```python
@@ -581,7 +587,7 @@ show_results("Lasso",best_LassoModel,best_alpha,X_validation,Y_validation)
 
     Results
     	 Best alpha: 0.00
-    	 Mean squared error: 1.08
+    	 Mean squared error: 1.05
     	 Variance score: 0.73
     
 
@@ -597,7 +603,7 @@ Building the KNeighborsRegressor ($2 < k < 30$)
 ```python
 from sklearn.neighbors import KNeighborsRegressor
 
-K = range(2,30)
+K = range(2,40)
 cv_knn_rmse = [rmse_cv(KNeighborsRegressor(n_neighbors = k), X_train,Y_train).mean() 
             for k in K ]
 
@@ -609,7 +615,7 @@ plot_rmse_param(series_lasso, "K")
 ![png](output_40_0.png)
 
 
-The model achieved (with $k = 29$) a low RMSE (**0.99**) and is **75** *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
+The model achieved (with $k = 29$) a RMSE of **0.97** and is **75** *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
 
 
 ```python
@@ -622,7 +628,7 @@ show_results("knn",best_knn,best_k,X_validation,Y_validation)
 
     Results
     	 Best alpha: 29.00
-    	 Mean squared error: 0.99
+    	 Mean squared error: 0.97
     	 Variance score: 0.75
     
 
@@ -644,15 +650,15 @@ show_results("svm",lsvr,None,X_validation,Y_validation)
 ```
 
     Results
-    	 Mean squared error: 1.11
-    	 Variance score: 0.72
+    	 Mean squared error: 1.05
+    	 Variance score: 0.73
     
 
 
 ![png](output_44_1.png)
 
 
-The model achieved a low RMSE (**1.11**) and is **72** *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
+The model achieved a RMSE of **1.11** and is **73** *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
 
 ## 3. Conclusion
 
@@ -671,15 +677,15 @@ results.append(data)
 ```
 
     Results
-    	 Mean squared error: 47090662893638453460729856.00
-    	 Variance score: -6586791053422158990540800.00
+    	 Mean squared error: 130885704393084586548002816.00
+    	 Variance score: -19471940645570516231389184.00
     
 
 
 ![png](output_48_1.png)
 
 
-The **retrained model** achieved (with the same parameters of the original model) aRMSE of **3.24** and is **53** *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
+The **retrained model** achieved (with the same parameters of the original model) aRMSE of **2.96** and is **56** *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
 
 
 ```python
@@ -693,8 +699,8 @@ results14.append(data)
 ```
 
     Results
-    	 Mean squared error: 3.29
-    	 Variance score: 0.54
+    	 Mean squared error: 2.96
+    	 Variance score: 0.56
     
 
 
@@ -712,8 +718,8 @@ results.append(data)
 ```
 
     Results
-    	 Mean squared error: 3.88
-    	 Variance score: 0.46
+    	 Mean squared error: 3.53
+    	 Variance score: 0.47
     
 
 
@@ -726,13 +732,13 @@ results.append(data)
 ```python
 Lasso14 = Lasso()
 Lasso14.fit(Xt_14,Yt_14)
-data = show_results("Lasso",RidgeModel14,None,Xv_14, Yv_14,ret=True)
+data = show_results("Lasso",Lasso14,None,Xv_14, Yv_14,ret=True)
 results14.append(data)
 ```
 
     Results
-    	 Mean squared error: 3.29
-    	 Variance score: 0.54
+    	 Mean squared error: 3.40
+    	 Variance score: 0.49
     
 
 
@@ -752,8 +758,8 @@ results.append(data)
 ```
 
     Results
-    	 Mean squared error: 3.92
-    	 Variance score: 0.45
+    	 Mean squared error: 3.58
+    	 Variance score: 0.47
     
 
 
@@ -766,20 +772,20 @@ results.append(data)
 ```python
 knn14 = KNeighborsRegressor(n_neighbors = best_k)
 knn14.fit(Xt_14,Yt_14)
-data = show_results("Knn",RidgeModel14,None,Xv_14, Yv_14,ret=True)
+data = show_results("Knn",knn14,None,Xv_14, Yv_14,ret=True)
 results14.append(data)
 ```
 
     Results
-    	 Mean squared error: 3.29
-    	 Variance score: 0.54
+    	 Mean squared error: 2.95
+    	 Variance score: 0.56
     
 
 
 ![png](output_59_1.png)
 
 
-The **original model** and the **retrained model** achieved similar RMSE (**3.88 and 3.29 respectively**) and is **46** and **54** (respectively) *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
+The **original model** and the **retrained model** achieved similar RMSE (**3.88 and 2.95 respectively**) and is **46** and **56** (respectively) *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
 
 ### 3.4 SVM
 
@@ -792,8 +798,8 @@ results.append(data)
 ```
 
     Results
-    	 Mean squared error: 4.44
-    	 Variance score: 0.38
+    	 Mean squared error: 3.53
+    	 Variance score: 0.48
     
 
 
@@ -806,20 +812,20 @@ results.append(data)
 ```python
 lsvr14 = LinearSVR(random_state=0, tol=1e-5)
 lsvr14.fit(Xt_14,Yt_14)
-data = show_results("LinearSVM",RidgeModel14,None,Xv_14, Yv_14,ret=True)
+data = show_results("LinearSVM",lsvr14,None,Xv_14, Yv_14,ret=True)
 results14.append(data)
 ```
 
     Results
-    	 Mean squared error: 3.29
-    	 Variance score: 0.54
+    	 Mean squared error: 3.15
+    	 Variance score: 0.53
     
 
 
 ![png](output_63_1.png)
 
 
-The **original model** and the **retrained model** achieved similar RMSE (**4.44 and 3.29 respectively**) and is **38** and **54** (respectively) *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
+The **original model** and the **retrained model** achieved similar RMSE (**3.53 and 3.15 respectively**) and is **48** and **53** (respectively) *percent* explained by R². As illustrated in the plot below the residue is randomly distributed, and near from zero.
 
 ### 3.5 Results
 
@@ -841,7 +847,7 @@ sns.factorplot(x='algotihm', y='val', hue='metric',
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x13e88eafcf8>
+    <seaborn.axisgrid.FacetGrid at 0x26a363c0ac8>
 
 
 
@@ -859,7 +865,7 @@ sns.factorplot(x='algotihm', y='val', hue='metric',
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x13e8c614da0>
+    <seaborn.axisgrid.FacetGrid at 0x26a379686a0>
 
 
 
@@ -905,64 +911,57 @@ pd.concat([rdf,rdf14]).sort_values(by=['algotihm'])
     <tr>
       <th>2</th>
       <td>Knn</td>
-      <td>3.919336e+00</td>
-      <td>4.517841e-01</td>
+      <td>3.584739e+00</td>
+      <td>4.666963e-01</td>
       <td>No</td>
     </tr>
     <tr>
       <th>2</th>
       <td>Knn</td>
-      <td>3.292835e+00</td>
-      <td>5.394158e-01</td>
+      <td>2.953291e+00</td>
+      <td>5.606372e-01</td>
       <td>Yes</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Lasso</td>
-      <td>3.875103e+00</td>
-      <td>4.579712e-01</td>
+      <td>3.531265e+00</td>
+      <td>4.746517e-01</td>
       <td>No</td>
     </tr>
     <tr>
       <th>1</th>
       <td>Lasso</td>
-      <td>3.292835e+00</td>
-      <td>5.394158e-01</td>
+      <td>3.404928e+00</td>
+      <td>4.934470e-01</td>
       <td>Yes</td>
     </tr>
     <tr>
       <th>3</th>
       <td>LinearSVM</td>
-      <td>4.439881e+00</td>
-      <td>3.789730e-01</td>
+      <td>3.525006e+00</td>
+      <td>4.755829e-01</td>
       <td>No</td>
     </tr>
     <tr>
       <th>3</th>
       <td>LinearSVM</td>
-      <td>3.292835e+00</td>
-      <td>5.394158e-01</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>LinearSVM</td>
-      <td>3.292835e+00</td>
-      <td>5.394158e-01</td>
+      <td>3.149916e+00</td>
+      <td>5.313853e-01</td>
       <td>Yes</td>
     </tr>
     <tr>
       <th>0</th>
       <td>Ridge</td>
-      <td>4.709066e+25</td>
-      <td>-6.586791e+24</td>
+      <td>1.308857e+26</td>
+      <td>-1.947194e+25</td>
       <td>No</td>
     </tr>
     <tr>
       <th>0</th>
       <td>Ridge</td>
-      <td>3.292835e+00</td>
-      <td>5.394158e-01</td>
+      <td>2.958403e+00</td>
+      <td>5.598767e-01</td>
       <td>Yes</td>
     </tr>
   </tbody>
@@ -971,4 +970,25 @@ pd.concat([rdf,rdf14]).sort_values(by=['algotihm'])
 
 
 
-As shown in the figures and the table above the **Lasso Regression** achieve the best result considering the RMSE and R². This result can be explained by the fact that the model presented a low error for the expected values.
+As shown in the figures and the table above the **Lasso Regression** achieve the best result considering the RMSE and R² using the original model and the **Ridge Regression** the retrained model. This result can be explained by the fact that the model presented a low error for the expected values.
+
+
+The figures below show the prediction the results of the prediction of both regressions, as we can see the results are quite similar.
+
+
+```python
+print_poly_predictions(Xt_14,Yt_14,best_LassoModel)
+```
+
+
+![png](output_71_0.png)
+
+
+
+```python
+print_poly_predictions(Xt_14,Yt_14,RidgeModel14)
+```
+
+
+![png](output_72_0.png)
+
