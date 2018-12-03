@@ -1,0 +1,15 @@
+Nessa atividade você irá usar seus conhecimentos sobre classificação para prever quais candidatos à Câmara de Deputados foram eleitos nas eleições de 2014. De forma específica
+
+Há desbalanceamento das classes (isto é, uma classe tem muito mais instâncias que outra) Em que proporção Quais efeitos colaterais o desbalanceamento de classes pode causar no classificador Como você poderia tratar isso (1 pt.)
+Treine um modelo de regressão logística, KNN, uma árvore de decisão e um modelo de adaboost. Tune esses modelos usando validação cruzada e controle overfitting se necessário, considerando as particularidades de cada modelo.  (2 pts.)
+Reporte Precision, Recall e AUC-Precision&Recall no treino e validação. Há uma grande diferença de desempenho no treinovalidação Como você avalia os resultados Justifique sua resposta. (2 pt.)
+Interprete as saídas dos modelos. Quais atributos parecem ser mais importantes de acordo com cada modelo  (2 pts.)
+Envie seus melhores modelos à competição do Kaggle. Faça pelo menos uma submissão. Sugestões para melhorar o modelo (2 pts.)
+Experimente outros modelos (e.g. SVM, RandomForests e GradientBoosting).
+Experimente outras estratégias de ensembles (e.g. Stacking).
+Experimente balancear as classes,  caso estejam desbalanceadas.
+Os dados estão neste link httpswww.kaggle.comcufcg-cdp-20182-lab3data (Links para um site externo)Links para um site externo
+
+Para a entrega envie o link no GitHub com o notebook usado para resolver o Lab.
+
+Obs Vocês estarão competindo com os alunos de graduação da disciplina Ciência de Dados Preditiva, que estarão trabalhando nesta mesma atividade.
